@@ -5,33 +5,26 @@ import { useEffect, useState } from 'react';
 
 export default function App() {
   const [db, setDB] = useState(null)
-  const [ok, setOk] = useState(false)
   const [status, setStatus] = useState('')
 
   const onPressInsert = () => {
     if (!db) {
-      console.log('db not set, skipping!')
       return
     }
+    const now = new Date()
     db.exec([
       {
-        sql: `INSERT INTO hello_worlds (at) VALUES (1234)`,
-        args: []
+        sql: `INSERT INTO hello_worlds (at) VALUES (?)`,
+        args: [
+          now.getTime()
+        ]
       }
-    ], false, (err, result) => {
-      console.log('press')
-      console.log(err)
-      console.log(result)
-      db.exec([
-        {
-          sql: `SELECT * FROM hello_worlds`,
-          args: []
-        }], true, (err, result) => {
-          console.log('read')
-          console.log(err)
-          console.log(result)
-        }
-      )
+    ], false, (err) => {
+      if (err) {
+        setStatus(`while inserting: ${err}`)
+        return
+      }
+      setStatus(`logged entry at=${now}`)
     })
   }
 
@@ -55,20 +48,18 @@ export default function App() {
         })
       })
       setDB(db)
-      return "ah yeah"
+      return "ready to log"
     }
     run().then((status)=> {
-      setOk(true)
       setStatus(status)
     }, (err) => {
-      setOk(false)
       setStatus(`err=${err}`)
     })
   }, [])
 
   return (
     <View style={styles.container}>
-      <Text>Ok={ok} status={status}</Text>
+      <Text>status={status}</Text>
       <Button
         onPress={onPressInsert}
         title="Insert"
