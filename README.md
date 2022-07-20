@@ -16,3 +16,4 @@ This app tracks that progress.
 [ ] able to install on personal phone (pixel 6 pro)  
 [ ] sync to web service upon change (push all data, it's small)  
 [ ] read local system alarm clock to record the wakeup time for the day  
+[ ] change application icon to something prettier  
