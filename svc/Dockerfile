@@ -15,6 +15,7 @@ RUN yarn install --production
 
 COPY . /usr/src/app
 
+RUN yarn run prisma generate
 RUN yarn build
 
 EXPOSE 3000

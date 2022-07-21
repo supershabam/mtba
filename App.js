@@ -60,20 +60,6 @@ export default function App() {
   const [db, setDB] = useState(null)
   const [status, setStatus] = useState('')
 
-  useEffect(() => {
-    const run = async ()=> {
-      if (!db) {
-        return
-      }
-      return await update(db)
-    }
-    run().then((ok) => {
-      console.log(ok)
-    }, (err) => {
-      console.log(err)
-    })
-  }, [db])
-
   const onPressInsert = () => {
     if (!db) {
       return

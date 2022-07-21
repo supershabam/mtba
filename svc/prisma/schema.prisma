@@ -1,6 +1,8 @@
 generator client {
   provider        = "prisma-client-js"
   previewFeatures = ["referentialIntegrity"]
+  binaryTargets = ["linux-musl"]
+  // "linux-musl" to the "binaryTargets" attribute in the "generator"
 }
 
 datasource db {
