@@ -2,7 +2,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Data = {
-  name: string
+  ats: Number[]
 }
 
 export default function handler(
@@ -13,9 +13,7 @@ export default function handler(
     res.status(404)
     return
   }
-  // const body = JSON.parse(req.body)
-  // console.log(body)
-  console.log(req.body)
-  console.log(req.body.keys)
-  res.status(200).json({ name: 'John Doe' })
+  const ats: Number[] = req.body.ats
+  console.log(ats)
+  res.status(200).json({ats: ats})
 }
