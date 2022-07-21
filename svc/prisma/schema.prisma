@@ -19,3 +19,7 @@ model updates {
 
   @@unique([target, version])
 }
+
+model datapoints {
+  at DateTime @id
+}
