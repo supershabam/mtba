@@ -24,7 +24,26 @@ const datapoints = (db) => {
   })
 }
 
-const update = async (db) => {
+const updateLocal = (db, at) => {
+  return new Promise((resolve, reject) => {
+    db.exec([
+      {
+        sql: `INSERT INTO hello_worlds (at) VALUES (?)`,
+        args: [
+          at.getTime()
+        ]
+      }
+    ], false, (err) => {
+      if (err) {
+        reject(err)
+        return
+      }
+      resolve()
+    })
+  })
+}
+
+const updateRemote = async (db) => {
   const dp = await datapoints(db)
   const body = JSON.stringify({ats: dp})
   const response = await fetch('https://mtba-svc.fly.dev/api/datapoints', {
@@ -60,19 +79,14 @@ export default function App() {
       return
     }
     const now = new Date()
-    db.exec([
-      {
-        sql: `INSERT INTO hello_worlds (at) VALUES (?)`,
-        args: [
-          now.getTime()
-        ]
-      }
-    ], false, (err) => {
-      if (err) {
-        setStatus(`while inserting: ${err}`)
-        return
-      }
-      setStatus(`logged entry at=${now}`)
+    const run = async () => {
+      await updateLocal(db, now)
+      setStatus(`logged local entry at=${now}, now syncing to remote`)
+      await updateRemote(db)
+      setStatus(`logged and synced entry at=${now}`)
+    }
+    run().then(() => {}, (err) => {
+      setStatus(`error=${err}`)
     })
   }
 
